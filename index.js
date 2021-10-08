@@ -4,7 +4,6 @@ if(process.env.NODE_ENV !== 'production'){
 const express = require('express');
 const app = express()
 const mongoose  = require('mongoose')
-const bodyParser = require('body-parser')
 const path = require('path');
 // connection url
 const MONGOURI = 'mongodb://localhost:27017';
@@ -24,14 +23,14 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
 const STRIPE_PUBLIC_KEY = process.env.STRIPE_PUBLIC_KEY
 const stripe = require('stripe')(STRIPE_SECRET_KEY)
 
-app.set("view engine","ejs");
 
-app.use(express.json())
+const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
 const PORT = process.env.PORT || 3000
 
+app.use(express.json())
 require('./models/user')
 require('./models/payment')
 
@@ -40,6 +39,7 @@ app.use(require('./routes/auth'))
 // app.use(require('./routes/user'))
 
 
+app.set("view engine","ejs");
 app.get('/',(req,res)=>{
     res.render("home",{
         key:STRIPE_PUBLIC_KEY

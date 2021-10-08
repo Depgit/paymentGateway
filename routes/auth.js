@@ -10,7 +10,7 @@ app.post('/signup',(req,res)=>{
     User.findOne({email:email})
     .then((savedUser)=>{
         if(savedUser){
-            return res.json({error:"user already exist"});
+            return res.send({error:"user already exist"});
         }
         // we will use bcrypt to hass the password and also to 
         // varify that can use jsonwebtoken but will do that letter
@@ -21,7 +21,7 @@ app.post('/signup',(req,res)=>{
         })
         user.save()
         .then(user=>{
-            res.json({message:"saved successfully"})
+            res.send({message:"saved successfully"})
         })
         .catch(err=>{
             console.log(err)
@@ -39,10 +39,10 @@ app.post('/signin',(req,res)=>{
     User.findOne({email:email})
     .then((savedUser)=>{
         if(!savedUser){
-            return res.json({error:"Invalid email or password"});
+            return res.send({error:"Invalid email or password"});
         }
         const {_id,name,email} = savedUser
-        res.json({user:{_id,name,email}})
+        res.send({user:{_id,name,email}})
     }).catch(err=>{
         console.log(err)
     })
