@@ -41,7 +41,7 @@ app.post('/signup',(req,res)=>{
         user.save()
         .then(user=>{
             // res.json({message:"saved successfully"})
-            res.json({
+            res.render('signin',{
                 success:true,
                 user: user
             })
@@ -68,10 +68,8 @@ app.post('/signin',(req,res)=>{
         if(password===savedUser.password){
             const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
             savedUser.token = token
-            res.cookie('auth',savedUser.token).json({
-                isAuth : true,
-                user:savedUser
-            })
+            res.cookie('auth',savedUser.token)
+            res.render('paymentDetails')
         }else{
             return res.json({error: "invalid password"})
         }

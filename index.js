@@ -42,9 +42,7 @@ app.use(require('./routes/payment'))
 
 app.set("view engine","ejs");
 app.get('/',(req,res)=>{
-    res.render("home",{
-        key:STRIPE_PUBLIC_KEY
-    })
+    res.render("home")
 })
 
 
