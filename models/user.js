@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
     country:{
         type:String,
         require:true
+    },
+    token:{
+        type:String
     }
 })
 

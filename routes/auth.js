@@ -23,7 +23,7 @@ app.post('/signup',(req,res)=>{
     User.findOne({email:email})
     .then((savedUser)=>{
         if(savedUser){
-            return res.json({error:"user already exist"});
+            return res.json({auth: false,error:"user already exist"});
         }
         // we will use bcrypt to hass the password 
         const user = new User({
@@ -41,7 +41,10 @@ app.post('/signup',(req,res)=>{
         user.save()
         .then(user=>{
             // res.json({message:"saved successfully"})
-            res.render('signin')
+            res.json({
+                success:true,
+                user: user
+            })
         })
         .catch(err=>{
             console.log(err)
@@ -52,6 +55,7 @@ app.post('/signup',(req,res)=>{
 })
 
 app.post('/signin',(req,res)=>{
+    console.log(req.cookies);
     const {email,password} = req.body
     if(!email || !password){
         return res.json({error:"Please add all the credential"})
@@ -63,8 +67,11 @@ app.post('/signin',(req,res)=>{
         }
         if(password===savedUser.password){
             const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
-            const {_id,name,email} = savedUser
-            res.json({token,user:{_id,name,email}})
+            savedUser.token = token
+            res.cookie('auth',savedUser.token).json({
+                isAuth : true,
+                user:savedUser
+            })
         }else{
             return res.json({error: "invalid password"})
         }

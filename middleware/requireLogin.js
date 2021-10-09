@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken')
 const {JWT_SECRET} = require('../key')
 
 module.exports=(req,res,next)=>{
-    const {authorization} = req.headers
+    const authorization = req.cookies.auth
     if(!authorization){
         return res.send({error: "user must be logged in"})
     }
-    const token = authorization.replace("Bearer ","")
+    const token = authorization
     jwt.verify(token,JWT_SECRET,(err, payload)=>{
         if(err){
             return res.json({error: "you must be logged in"});

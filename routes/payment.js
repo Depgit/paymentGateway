@@ -1,7 +1,6 @@
 const app = require('express')()
 const mongoose = require('mongoose')
 const User = mongoose.model("User")
-
 const requireLogin = require('../middleware/requireLogin')
 const {STRIPE_SECRET_KEY,STRIPE_PUBLIC_KEY} = require('../key')
 const stripe = require('stripe')(STRIPE_SECRET_KEY);
@@ -12,6 +11,7 @@ app.get('/payment',(req,res)=>{
 })
 
 app.post('/payment',requireLogin, (req, res)=>{
+    console.log(req);
     stripe.customers.create({
         email: req.body.stripeEmail,
         source: req.body.stripeToken,
