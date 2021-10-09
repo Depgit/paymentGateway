@@ -1,3 +1,4 @@
+it is not good neither completed and also very bad front end<br> but if u still like to clone<br>
 clone the repository 
 <br> run ```npm install```<br>
 create a ```key.js``` file
