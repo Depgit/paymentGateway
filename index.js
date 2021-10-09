@@ -35,9 +35,7 @@ require('./models/user')
 require('./models/payment')
 
 app.use(require('./routes/auth'))
-// app.use(require('./routes/payment'))
-// app.use(require('./routes/user'))
-
+app.use(require('./routes/payment'))
 
 app.set("view engine","ejs");
 app.get('/',(req,res)=>{
@@ -45,6 +43,10 @@ app.get('/',(req,res)=>{
         key:STRIPE_PUBLIC_KEY
     })
 })
+
+
+
+
 
 app.listen(PORT,()=>{
     console.log("running on ",PORT);

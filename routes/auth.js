@@ -1,7 +1,8 @@
 const app = require('express')()
 const mongoose = require('mongoose')
 const User = mongoose.model("User")
-
+const jwt = require('jsonwebtoken')
+const {JWT_SECRET,STRIPE_PUBLIC_KEY} = require('../key')
 
 
 
@@ -14,26 +15,33 @@ app.get('/signin',(req,res)=>{
 })
 
 app.post('/signup',(req,res)=>{
-    const {name , email,password} = req.body
+    const {name , email,password,line1,postal_code,city,state,country} = req.body
     console.log(req.body);
-    if(!email || !password || !name){
+    if(!email || !password || !name || !line1 || !postal_code || !city || !state || !country){
         return res.json({error:"Please add all the credential"})
     }
     User.findOne({email:email})
     .then((savedUser)=>{
         if(savedUser){
-            return res.send({error:"user already exist"});
+            return res.json({error:"user already exist"});
         }
-        // we will use bcrypt to hass the password and also to 
-        // varify that can use jsonwebtoken but will do that letter
+        // we will use bcrypt to hass the password 
         const user = new User({
             email,
             password,
-            name
+            name,
+            address:{
+                line1,
+                postal_code,
+                city,
+                state,
+                country
+            }
         })
         user.save()
         .then(user=>{
-            res.send({message:"saved successfully"})
+            // res.json({message:"saved successfully"})
+            res.render('signin')
         })
         .catch(err=>{
             console.log(err)
@@ -51,14 +59,21 @@ app.post('/signin',(req,res)=>{
     User.findOne({email:email})
     .then((savedUser)=>{
         if(!savedUser){
-            return res.send({error:"Invalid email or password"});
+            return res.json({error:"Invalid email or password"});
         }
-        const {_id,name,email} = savedUser
-        res.send({user:{_id,name,email}})
+        if(password===savedUser.password){
+            const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
+            const {_id,name,email} = savedUser
+            res.json({token,user:{_id,name,email}})
+        }else{
+            return res.json({error: "invalid password"})
+        }
     }).catch(err=>{
         console.log(err)
+        res.json({error:"invalid email or password"})
     })
 })
+
 
 
 module.exports = app
