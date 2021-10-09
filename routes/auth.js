@@ -2,8 +2,20 @@ const app = require('express')()
 const mongoose = require('mongoose')
 const User = mongoose.model("User")
 
+
+
+
+app.get('/signup',(req,res)=>{
+    res.render('signup');
+})
+
+app.get('/signin',(req,res)=>{
+    res.render('signin');
+})
+
 app.post('/signup',(req,res)=>{
     const {name , email,password} = req.body
+    console.log(req.body);
     if(!email || !password || !name){
         return res.json({error:"Please add all the credential"})
     }
