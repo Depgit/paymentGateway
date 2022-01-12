@@ -1,4 +1,12 @@
-it is not good neither completed and also very bad front end<br> but if u still like to clone<br>
+it is not good neither completed and also very bad front end<br>
+TECH STACK:<br>
+<ul>
+    <li>Nodejs Backend</li>
+    <li> express js</li>
+    <li> mongodb </li>
+</ul>
+but if u still like to clone<br>
+
 clone the repository 
 <br> run ```npm install```<br>
 create a ```key.js``` file
